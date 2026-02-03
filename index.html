@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Be My Valentine 💘</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 45px;
+      border-radius: 20px;
+      text-align: center;
+      width: 380px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+      z-index: 2;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .subtext {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+    }
+
+    button {
+      padding: 12px 26px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .yes-button {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .no-button {
+      background: #e5e7eb;
+      color: black;
+    }
+
+    /* Hearts */
+    .heart {
+      position: absolute;
+      animation: floatUp 6s linear forwards;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-10vh);
+        opacity: 0;
+      }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      from {
+        transform: translateY(-10vh) rotate(0deg);
+      }
+      to {
+        transform: translateY(110vh) rotate(720deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>Will you be my Valentine? 💖</h2>
+    <div class="subtext">There is only one correct answer 😌</div>
+
+    <div class="buttons">
+      <button class="yes-button" onclick="handleYesClick()">Yes 💕</button>
+      <button class="no-button" onclick="handleNoClick()">No</button>
+    </div>
+  </div>
+
+  <script>
+    let noCount = 0;
+
+    const noMessages = [
+      "No",
+      "Are you sure?",
+      "Really sure?",
+      "Think again 😐",
+      "That kinda hurt 😢",
+      "Ouch… my heart 💔",
+      "Please reconsider 🥺",
+      "I’m begging now 😭",
+      "This is getting painful 💀",
+      "Okay but why tho?",
+      "You’re still clicking No??",
+      "I won’t give up 😤",
+      "Last warning 😈",
+      "Fine… but Yes is better ❤️"
+    ];
+
+    function handleNoClick() {
+      const noBtn = document.querySelector('.no-button');
+      const yesBtn = document.querySelector('.yes-button');
+
+      noBtn.textContent = noMessages[Math.min(noCount + 1, noMessages.length - 1)];
+      noCount++;
+
+      // Move No button more aggressively
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 120 - 60;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+      // Grow Yes button faster
+      const currentSize = parseFloat(
+        window.getComputedStyle(yesBtn).fontSize
+      );
+      yesBtn.style.fontSize = `${currentSize * 1.25}px`;
+
+      // Small vibration on No
+      if (navigator.vibrate) {
+        navigator.vibrate(100);
+      }
+    }
+
+    function handleYesClick() {
+      // Strong vibration
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200, 100, 300]);
+      }
+
+      launchConfetti();
+
+      document.body.innerHTML = `
+        <div style="
+          color: white;
+          text-align: center;
+          font-family: 'Segoe UI', Arial, sans-serif;
+        ">
+          <h1>YAYYYY 💘🎉</h1>
+          <h2>You chose wisely ❤️</h2>
+          <p>Happy Valentine’s Day 🌹</p>
+          <h3 style="margin-top:40px;">
+            Zander ❤️ Supergirl
+          </h3>
+        </div>
+      `;
+    }
+
+    // Floating hearts
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = Math.random() * 16 + 14 + 'px';
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }, 450);
+
+    // Confetti effect
+    function launchConfetti() {
+      for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor =
+          `hsl(${Math.random() * 360}, 100%, 60%)`;
+        confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+  </script>
+
+</body>
+</html>
