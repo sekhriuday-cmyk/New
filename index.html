@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Be My Valentine 💘</title>
 
   <style>
@@ -9,7 +10,7 @@
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(135deg, #0f172a, #1e293b);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,39 +19,40 @@
 
     .card {
       background: white;
-      padding: 45px;
+      padding: 32px;
       border-radius: 20px;
       text-align: center;
-      width: 380px;
+      width: 90vw;
+      max-width: 420px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.35);
       z-index: 2;
     }
 
     h2 {
+      font-size: 26px;
       margin-bottom: 10px;
     }
 
     .subtext {
-      font-size: 14px;
+      font-size: 16px;
       color: #6b7280;
     }
 
     .buttons {
       margin-top: 30px;
       display: flex;
-      justify-content: center;
-      gap: 20px;
+      flex-direction: column;
+      gap: 18px;
       position: relative;
     }
 
     button {
-      padding: 12px 26px;
-      font-size: 18px;
+      padding: 16px;
+      font-size: 20px;
       border: none;
-      border-radius: 10px;
+      border-radius: 14px;
       cursor: pointer;
       transition: all 0.25s ease;
-      position: relative;
     }
 
     .yes-button {
@@ -63,7 +65,7 @@
       color: black;
     }
 
-    /* Hearts */
+    /* Floating hearts */
     .heart {
       position: absolute;
       animation: floatUp 6s linear forwards;
@@ -85,8 +87,8 @@
     /* Confetti */
     .confetti {
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       animation: fall 3s linear forwards;
     }
 
@@ -98,6 +100,19 @@
         transform: translateY(110vh) rotate(720deg);
       }
     }
+
+    /* Desktop improvements */
+    @media (min-width: 768px) {
+      .buttons {
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      button {
+        padding: 14px 30px;
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -105,7 +120,7 @@
 
   <div class="card">
     <h2>Will you be my Valentine? 💖</h2>
-    <div class="subtext">There is only one correct answer 😌</div>
+    <div class="subtext">Be honest… but choose wisely 😌</div>
 
     <div class="buttons">
       <button class="yes-button" onclick="handleYesClick()">Yes 💕</button>
@@ -121,44 +136,39 @@
       "Are you sure?",
       "Really sure?",
       "Think again 😐",
-      "That kinda hurt 😢",
-      "Ouch… my heart 💔",
+      "That hurt 😢",
+      "My heart 💔",
       "Please reconsider 🥺",
       "I’m begging now 😭",
-      "This is getting painful 💀",
-      "Okay but why tho?",
-      "You’re still clicking No??",
-      "I won’t give up 😤",
-      "Last warning 😈",
-      "Fine… but Yes is better ❤️"
+      "You’re still saying no?",
+      "Yes is right there 👉❤️"
     ];
 
     function handleNoClick() {
       const noBtn = document.querySelector('.no-button');
       const yesBtn = document.querySelector('.yes-button');
 
-      noBtn.textContent = noMessages[Math.min(noCount + 1, noMessages.length - 1)];
+      noBtn.textContent =
+        noMessages[Math.min(noCount + 1, noMessages.length - 1)];
       noCount++;
 
-      // Move No button more aggressively
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 120 - 60;
+      // Keep movement phone-safe
+      const x = Math.random() * 80 - 40;
+      const y = Math.random() * 60 - 30;
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
-      // Grow Yes button faster
+      // Grow Yes button
       const currentSize = parseFloat(
         window.getComputedStyle(yesBtn).fontSize
       );
-      yesBtn.style.fontSize = `${currentSize * 1.25}px`;
+      yesBtn.style.fontSize = `${currentSize * 1.15}px`;
 
-      // Small vibration on No
       if (navigator.vibrate) {
         navigator.vibrate(100);
       }
     }
 
     function handleYesClick() {
-      // Strong vibration
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200, 100, 300]);
       }
@@ -166,15 +176,11 @@
       launchConfetti();
 
       document.body.innerHTML = `
-        <div style="
-          color: white;
-          text-align: center;
-          font-family: 'Segoe UI', Arial, sans-serif;
-        ">
-          <h1>YAYYYY 💘🎉</h1>
+        <div style="color:white;text-align:center;">
+          <h1 style="font-size:36px;">YAYYYY 💘🎉</h1>
           <h2>You chose wisely ❤️</h2>
           <p>Happy Valentine’s Day 🌹</p>
-          <h3 style="margin-top:40px;">
+          <h3 style="margin-top:30px;">
             Zander ❤️ Supergirl
           </h3>
         </div>
@@ -187,21 +193,19 @@
       heart.className = 'heart';
       heart.textContent = '💖';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = Math.random() * 16 + 14 + 'px';
+      heart.style.fontSize = Math.random() * 18 + 16 + 'px';
       document.body.appendChild(heart);
 
       setTimeout(() => heart.remove(), 6000);
-    }, 450);
+    }, 500);
 
-    // Confetti effect
     function launchConfetti() {
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 120; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * 100 + 'vw';
         confetti.style.backgroundColor =
           `hsl(${Math.random() * 360}, 100%, 60%)`;
-        confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
         document.body.appendChild(confetti);
 
         setTimeout(() => confetti.remove(), 3000);
